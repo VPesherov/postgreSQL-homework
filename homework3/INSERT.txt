@@ -1,0 +1,70 @@
+
+
+INSERT INTO musical_performer(performer_id ,name)
+VALUES (1, 'Кишлак'), (2, 'saypink!'), (3, 'Операция пластилин'), (4, 'лиззз');
+
+insert into musical_performer (performer_id, name)
+values (5, 'quizzzmeow');
+
+INSERT INTO genre_music (genre_id ,name)
+VALUES (1, 'Инди-рок'), (2, 'Панк-рок'), (3, 'Рэп');
+
+INSERT INTO albums  (album_id, name, issue_year)
+VALUES (1, 'Эскапист', 2022), (2, 'Альбом, который вы не ждали', 2023), (3, 'Черняга', 2023), (4, 'мой сон', 2023), (5, 'СХИК', 2019);
+
+INSERT INTO public.albums (album_id,"name",issue_year)
+	VALUES (6, 'Уап!',2017);
+
+INSERT INTO collections  (collections_id,name, issue_year)
+VALUES (1, 'Лето', 2022), (2, 'Весна', 2023), (3, 'Осень', 2023), (4, 'Зима', 2023), (5, 'Зима1', 2019);
+
+insert into tracks (track_id,name, duration, album_id)
+values (1, 'Самый лучший день', 83, 1), (2, 'Эскапист', 135, 1), (3, 'Мечта дурака 2', 118, 2), (4, 'Недотрога', 205, 3), (5,'Хитрый лис', 181, 3)
+, (6, 'Лучшая среди нас', 145, 3)
+, (7,'СХИК', 120, 4);
+
+insert into tracks (track_id, name, duration, album_id)
+values (8, 'Уап', 126, 5);
+
+insert into tracks(track_id, name, duration, album_id)
+values (9, 'Сон мой', 121, 3);
+
+
+
+--Данные для album_artist
+INSERT INTO public.album_artist (performer_id,album_id)
+	VALUES (1,1);
+INSERT INTO public.album_artist (performer_id,album_id)
+	VALUES (4,3);
+INSERT INTO public.album_artist (performer_id,album_id)
+	VALUES (1,4);
+INSERT INTO public.album_artist (performer_id,album_id)
+	VALUES (5,2);
+
+
+-- Данные для arist_genre
+INSERT INTO public.artist_genre (genre_id,performer_id)
+	VALUES (3,1);
+INSERT INTO public.artist_genre (genre_id,performer_id)
+	VALUES (2,1);
+INSERT INTO public.artist_genre (genre_id,performer_id)
+	VALUES (1,1);
+INSERT INTO public.artist_genre (genre_id,performer_id)
+	VALUES (3,2);
+INSERT INTO public.artist_genre (genre_id,performer_id)
+	VALUES (3,4);
+INSERT INTO public.artist_genre (genre_id,performer_id)
+	VALUES (1,4);
+
+
+-- track_collection
+INSERT INTO public.track_collection (collection_id,track_id)
+	VALUES (1,1);
+INSERT INTO public.track_collection (collection_id,track_id)
+	VALUES (1,2);
+INSERT INTO public.track_collection (collection_id,track_id)
+	VALUES (4,2);
+INSERT INTO public.track_collection (collection_id,track_id)
+	VALUES (5,4);
+INSERT INTO public.track_collection (collection_id,track_id)
+	VALUES (3,7);
