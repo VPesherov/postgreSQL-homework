@@ -2,46 +2,56 @@
 select name, duration from tracks t2 
 where duration = 
 (select max(duration) from tracks t)
-
+;
 --Название треков, продолжительность которых не менее 3,5 минут.
+--ПЕРЕДЕЛАНО
 select name from tracks t 
-where duration <= 210
-
+where duration >= 210
+;
 --Названия сборников, вышедших в период с 2018 по 2020 год включительно.
 select name from collections c
 where issue_year between 2018 and 2020
-
+;
 --Исполнители, чьё имя состоит из одного слова.
 select name  from musical_performer mp 
 where length(name) - length(replace(name,' ','')) = 0
-
+;
 --Название треков, которые содержат слово «мой» или «my».
+--ПЕРЕДЕЛАНО
 select name from tracks t 
-where name like '%мой%' or name like '%my%'
-
+where name ilike 'мой %' or name ilike 'my %'
+or name ilike '% мой %' or name ilike '% my %'
+or name ilike '% мой' or name ilike '% my'
+or name ilike 'мой' or name ilike 'my'
+;
 --Количество исполнителей в каждом жанре.
 select gm."name", count(mp."name")  from artist_genre ag 
 join musical_performer mp on mp.performer_id = ag.performer_id 
 join genre_music gm ON gm.genre_id = ag.genre_id 
 group by gm."name" 
-
+;
 --Количество треков, вошедших в альбомы 2019–2020 годов.
-select a.issue_year  , count(a."name")  from tracks t 
+--ПЕРЕДЕЛАНО
+select count(a."name")  from tracks t 
 join albums a on a.album_id = t.album_id
 where a.issue_year between 2019 and 2020
-group by a.issue_year 
-
+--group by a.issue_year 
+;
 --Средняя продолжительность треков по каждому альбому.
 select a."name" , avg(t.duration)  from tracks t 
 join albums a on a.album_id = t.album_id 
 group by a."name" 
-
+;
 --Все исполнители, которые не выпустили альбомы в 2020 году.
+--ПЕРЕДЕЛАНО
+select name from musical_performer mp2 
+where mp2."name" not in (
 select distinct mp."name"  from album_artist aa 
 join musical_performer mp on aa.performer_id = mp.performer_id 
 join albums a on a.album_id = aa.album_id 
-where a.issue_year != 2020
-
+where a.issue_year = 2020
+)
+;
 --Названия сборников, в которых присутствует конкретный исполнитель (выберите его сами).
 select distinct c."name"  from track_collection tc 
 join collections c on c.collections_id = tc.collection_id
@@ -49,7 +59,7 @@ join tracks t on t.track_id = tc.track_id
 join album_artist aa on aa.album_id  = t.album_id 
 join musical_performer mp on mp.performer_id = aa.performer_id 
 where mp."name" = 'Кишлак'
-
+;
 --Названия альбомов, в которых присутствуют исполнители более чем одного жанра.
 /*
 select mp."name",count(distinct gm."name") from artist_genre ag 
@@ -64,12 +74,12 @@ join artist_genre ag on ag.performer_id  = mp.performer_id
 join genre_music gm on ag.genre_id = gm.genre_id
 group by mp."name", a."name" 
 having count(distinct gm."name") > 1
-
+;
 --Название трэков, которые не входят в сборники
 select t."name"  from track_collection tc 
 full join tracks t on t.track_id = tc.track_id 
 where collection_id is null
-
+;
 --Исполнитель или исполнители, написавшие самый короткий по продолжительности трек, — теоретически таких треков может быть несколько.
 select mp."name"  from tracks t 
 join albums a ON a.album_id = t.album_id
@@ -82,9 +92,10 @@ from tracks t
 join album_artist aa on t.album_id  = aa.album_id
 join musical_performer mp on mp.performer_id = aa.performer_id 
 )
-
+;
 --Названия альбомов, содержащих наименьшее количество треков.
-select a."name" as album_name, count(track_id) as count_track  from tracks t
+select a."name" as album_name,count(track_id) as count_track  
+from tracks t
 join albums a on a.album_id = t.album_id 
 group by a."name" 
 having count(track_id) = (
@@ -94,5 +105,5 @@ join albums a on a.album_id = t.album_id
 group by a."name" 
 ) as TBL
 )
-
+;
 

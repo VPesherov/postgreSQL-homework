@@ -29,6 +29,11 @@ values (8, 'Уап', 126, 5);
 insert into tracks(track_id, name, duration, album_id)
 values (9, 'Сон мой', 121, 3);
 
+insert into tracks(track_id, name, duration, album_id)
+values (10, 'Голоса', 212, 1);
+
+insert into tracks(track_id, name, duration, album_id)
+values (11, 'myself', 212, 4);
 
 
 --Данные для album_artist
