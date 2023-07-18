@@ -97,10 +97,10 @@ with Session() as session:
     #print(iterable)
 
     q = session.query(Sale, Stock).filter(Sale.id_stock == Stock.id).all()
-
     for i in q:
-        print(i.id)
-
+        print(i[0], i[1])
+    # https://stackoverflow.com/questions/6044309/sqlalchemy-how-to-join-several-tables-by-one-query
+    # result = session.query(Sale, Stock, Book).filter(Sale.id_stock = ).all()
     #for c in iterable:
     #    print(c)
 
