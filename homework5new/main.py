@@ -20,15 +20,21 @@ def add_json_data_in_table(session, data):
     for record in data:
         # print(record)
         # print(record.get('model'), [record.get('model')])
-        model = {
+        models = {
             'publisher': Publisher,
             'shop': Shop,
             'book': Book,
             'stock': Stock,
             'sale': Sale,
-        }[record.get('model')]
-        # print(model)
+        }
+        record_test = record.get('model')
+        print(record_test)
+        model = models[record_test]
+        print(model)
+        print(type(model), model, model(id=record.get('pk'), **record.get('fields')))
         session.add(model(id=record.get('pk'), **record.get('fields')))
+    print('-'*20)
+    print(type(model), model)
     session.commit()
     # for data in json_data:
     #     if data['model'] == 'publisher':
