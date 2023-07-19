@@ -2,6 +2,7 @@ import sqlalchemy
 import os
 import dotenv
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import or_, select
 from models import create_tables, Book, Stock, Sale, Shop, Publisher
 import json
 
@@ -13,6 +14,7 @@ def load_json_data(directory):
     return json_data
 
 
+# объясните пожалуйста как работает данный код?
 def add_json_data_in_table(session, data):
     for record in data:
         # print(record)
@@ -76,31 +78,16 @@ item_list = []
 
 with Session() as session:
     add_json_data_in_table(session, json_data)
+    publisher_id = input('Введите имя или индетификатор издателя: ')
+    if not publisher_id.isdigit():
+        publisher_id = session.query(Publisher.id).filter(Publisher.name == publisher_id).all()[0][0]
 
-    publisher = input('Введите имя или индетификатор издателя: ')
-    if publisher.isdigit():
-        publisher_name = session.query(Publisher).filter(Publisher.id == publisher).all()
-        if publisher_name == []:
-            publisher_name = None
-        else:
-            publisher_name = publisher_name[0]
+    q = session.query(Book.title, Shop.name, Sale.price, Sale.date_sale).filter(Stock.id_shop == Shop.id).filter(
+        Sale.id_stock == Stock.id).filter(Book.id == Stock.id_book).filter(Publisher.id == Book.id_publisher).filter(
+        Publisher.id == publisher_id).all()
 
-    # сначала создаём подзапрос, который мы будем использовать в нём мы находим все домашки с буквой "з"
-    # subq = session.query(Stock).subquery()
-    #print(subq)
-    # теперь создаём сам запрос и запишем его в переменную для простоты
-    # создаём запрос с той таблицей из которой нам нужен результат делаем join
-    # передаём в этот join подзапрос и соединяем их по id
-    # в данном случае subq.c.course_id - "с" в данном случае это обязательная переменная которую надо указывать
-    # всегда
-    #iterable = session.query(Sale).join(subq, Sale.id_stock == subq.c.id).all()
-    #print(iterable)
-
-    q = session.query(Sale, Stock).filter(Sale.id_stock == Stock.id).all()
-    for i in q:
-        print(i[0], i[1])
-    # https://stackoverflow.com/questions/6044309/sqlalchemy-how-to-join-several-tables-by-one-query
-    # result = session.query(Sale, Stock, Book).filter(Sale.id_stock = ).all()
-    #for c in iterable:
-    #    print(c)
-
+    if not q:
+        print('Ничего не найдено')
+    else:
+        for i in q:
+            print(*i, sep=' | ')
