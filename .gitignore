@@ -2,8 +2,6 @@ __pycache__/
 venv/
 .idea/
 .env/
-<<<<<<< HEAD
 homework5/.env/
-=======
 homework5/.env
->>>>>>> fde571caf4814683dc81264f77f348015e643690
+homework5new/.env
